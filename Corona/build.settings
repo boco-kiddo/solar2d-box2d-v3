@@ -1,0 +1,30 @@
+--
+-- For more information on build.settings see the Corona Build Guide at:
+-- http://docs.coronalabs.com/guide/distribution/buildSettings/index.html
+--
+
+settings = 
+{
+	-- plugin.box2dv3 for Android and Win32 builds, from the local plugin folder (install_plugin.bat).
+	-- The Simulator keeps using the DLL that win32\build.bat copies to its plugins folder; add
+	-- ["win32-sim"] = true to supportedPlatforms to use the packed plugin there too.
+	plugins =
+	{
+		["plugin.box2dv3"] = { publisherId = "com.box2dv3", supportedPlatforms = { android = true, win32 = true } },
+	},
+
+	orientation =
+	{
+		default = "landscapeRight",
+		supported = { "landscapeRight", "landscapeLeft" },
+	},
+
+	iphone =
+	{
+		xcassets = "Images.xcassets",
+		plist =
+		{
+			UILaunchStoryboardName = "LaunchScreen",
+		},
+	},
+}

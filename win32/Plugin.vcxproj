@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  plugin.box2dv3 for the Solar2D Windows Simulator: builds plugin_box2dv3.dll (Box2D 3.2 + Lua binding)
+  and copies it to %APPDATA%\Corona Labs\Corona Simulator\Plugins.
+  Needs: VS2019 (toolset v142) or newer, a Windows 10 SDK, and the CORONA_ROOT environment variable
+  (Solar2D Native folder). Box2D .c files are compiled in MSVC's default C mode with
+  shared\plugin\msvc\msvc_c_compat.h force-included (see that file).
+-->
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{79F0CACC-457B-4A25-BC54-81277688C361}</ProjectGuid>
+    <RootNamespace>Plugin</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <TargetName>plugin_box2dv3</TargetName>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\obj\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <LocalDebuggerCommand>$(CORONA_PATH)\Corona Simulator.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommandArguments>"$(ProjectDir)..\Corona\main.lua"</LocalDebuggerCommandArguments>
+    <LocalDebuggerWorkingDirectory>$(CORONA_PATH)</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(CORONA_ROOT)\Corona\shared\include\Corona;$(CORONA_ROOT)\Corona\shared\include\lua;$(ProjectDir)..\shared\include;$(ProjectDir)..\shared\plugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_USRDLL;PLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <DisableSpecificWarnings>4996;4244;4267;4305;4146</DisableSpecificWarnings>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(CORONA_ROOT)\Corona\win\lib\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>if not exist "%APPDATA%\Corona Labs\Corona Simulator\Plugins" mkdir "%APPDATA%\Corona Labs\Corona Simulator\Plugins"
+copy /Y "$(TargetPath)" "%APPDATA%\Corona Labs\Corona Simulator\Plugins\"</Command>
+      <Message>Copy $(TargetFileName) to the Corona Simulator plugins folder</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(CORONA_ROOT)\Corona\shared\include\Corona;$(CORONA_ROOT)\Corona\shared\include\lua;$(ProjectDir)..\shared\include;$(ProjectDir)..\shared\plugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <DisableSpecificWarnings>4996;4244;4267;4305;4146</DisableSpecificWarnings>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(CORONA_ROOT)\Corona\win\lib\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <PostBuildEvent>
+      <Command>if not exist "%APPDATA%\Corona Labs\Corona Simulator\Plugins" mkdir "%APPDATA%\Corona Labs\Corona Simulator\Plugins"
+copy /Y "$(TargetPath)" "%APPDATA%\Corona Labs\Corona Simulator\Plugins\"</Command>
+      <Message>Copy $(TargetFileName) to the Corona Simulator plugins folder</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\shared\src\aabb.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\arena_allocator.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\bitset.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\body.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\broad_phase.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\constraint_graph.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact_solver.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact_solver_w4.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact_solver_w8.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\core.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\distance.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\distance_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\dynamic_tree.c">
+      <!-- built through shared\plugin\msvc\dynamic_tree_msvc.c (no __typeof__ in MSVC C) -->
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\msvc\dynamic_tree_msvc.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\geometry.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\hull.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\id_pool.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\island.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\manifold.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\math_functions.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\motor_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\mover.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\mover_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\parallel_for.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\physics_world.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\pogo_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\prismatic_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\recording.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\replay.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\revolute_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\scheduler.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\sensor.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\shape.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\simd.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\snapshot.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\solver.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\solver_set.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\table.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\timer.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\types.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\weld_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\wheel_joint.c">
+      <ForcedIncludeFiles>$(ProjectDir)..\shared\plugin\msvc\msvc_c_compat.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_body.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_events.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_joints.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_query.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_draw.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_mover.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_snapshot.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_main.cpp" />
+    <ClCompile Include="..\shared\plugin\b2plugin_shapes.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\shared\src\aabb.h" />
+    <ClInclude Include="..\shared\src\arena_allocator.h" />
+    <ClInclude Include="..\shared\src\bitset.h" />
+    <ClInclude Include="..\shared\src\body.h" />
+    <ClInclude Include="..\shared\src\broad_phase.h" />
+    <ClInclude Include="..\shared\src\constraint_graph.h" />
+    <ClInclude Include="..\shared\src\contact.h" />
+    <ClInclude Include="..\shared\src\contact_solver.h" />
+    <ClInclude Include="..\shared\src\contact_solver_wide.inl" />
+    <ClInclude Include="..\shared\src\container.h" />
+    <ClInclude Include="..\shared\src\core.h" />
+    <ClInclude Include="..\shared\src\dynamic_tree.h" />
+    <ClInclude Include="..\shared\src\id_pool.h" />
+    <ClInclude Include="..\shared\src\island.h" />
+    <ClInclude Include="..\shared\src\joint.h" />
+    <ClInclude Include="..\shared\src\parallel_for.h" />
+    <ClInclude Include="..\shared\src\physics_world.h" />
+    <ClInclude Include="..\shared\src\platform.h" />
+    <ClInclude Include="..\shared\src\recording.h" />
+    <ClInclude Include="..\shared\src\recording_ops.inl" />
+    <ClInclude Include="..\shared\src\replay.h" />
+    <ClInclude Include="..\shared\src\scheduler.h" />
+    <ClInclude Include="..\shared\src\sensor.h" />
+    <ClInclude Include="..\shared\src\shape.h" />
+    <ClInclude Include="..\shared\src\simd.h" />
+    <ClInclude Include="..\shared\src\snapshot.h" />
+    <ClInclude Include="..\shared\src\solver.h" />
+    <ClInclude Include="..\shared\src\solver_set.h" />
+    <ClInclude Include="..\shared\src\table.h" />
+    <ClInclude Include="..\shared\include\box2d\base.h" />
+    <ClInclude Include="..\shared\include\box2d\box2d.h" />
+    <ClInclude Include="..\shared\include\box2d\collision.h" />
+    <ClInclude Include="..\shared\include\box2d\config.h" />
+    <ClInclude Include="..\shared\include\box2d\constants.h" />
+    <ClInclude Include="..\shared\include\box2d\id.h" />
+    <ClInclude Include="..\shared\include\box2d\math_functions.h" />
+    <ClInclude Include="..\shared\include\box2d\math_types.h" />
+    <ClInclude Include="..\shared\include\box2d\types.h" />
+    <ClInclude Include="..\shared\plugin\b2plugin.h" />
+    <ClInclude Include="..\shared\plugin\msvc\msvc_c_compat.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

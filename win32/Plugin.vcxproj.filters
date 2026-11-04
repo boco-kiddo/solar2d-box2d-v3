@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="plugin">
+      <UniqueIdentifier>{6A1F3C1E-2B7D-4E55-9A0B-1C2D3E4F5A61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="box2d">
+      <UniqueIdentifier>{6A1F3C1E-2B7D-4E55-9A0B-1C2D3E4F5A62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="box2d\include">
+      <UniqueIdentifier>{6A1F3C1E-2B7D-4E55-9A0B-1C2D3E4F5A63}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\shared\src\aabb.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\arena_allocator.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\bitset.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\body.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\broad_phase.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\constraint_graph.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact_solver.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact_solver_w4.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\contact_solver_w8.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\core.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\distance.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\distance_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\dynamic_tree.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\geometry.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\hull.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\id_pool.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\island.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\manifold.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\math_functions.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\motor_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\mover.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\mover_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\parallel_for.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\physics_world.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\pogo_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\prismatic_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\recording.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\replay.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\revolute_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\scheduler.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\sensor.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\shape.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\simd.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\snapshot.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\solver.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\solver_set.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\table.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\timer.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\types.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\weld_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\src\wheel_joint.c">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\msvc\dynamic_tree_msvc.c">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_body.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_shapes.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_events.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_joints.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_query.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_draw.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_mover.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_snapshot.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\plugin\b2plugin_main.cpp">
+      <Filter>plugin</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\shared\src\aabb.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\arena_allocator.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\bitset.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\body.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\broad_phase.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\constraint_graph.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\contact.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\contact_solver.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\contact_solver_wide.inl">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\container.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\core.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\dynamic_tree.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\id_pool.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\island.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\joint.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\parallel_for.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\physics_world.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\platform.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\recording.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\recording_ops.inl">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\replay.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\scheduler.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\sensor.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\shape.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\simd.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\snapshot.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\solver.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\solver_set.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\src\table.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\base.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\box2d.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\collision.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\config.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\constants.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\id.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\math_functions.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\math_types.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\box2d\types.h">
+      <Filter>box2d\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\plugin\b2plugin.h">
+      <Filter>plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\plugin\msvc\msvc_c_compat.h">
+      <Filter>plugin</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+build/
+.idea/
+.gradle/
+BuiltPlugin/
+*xcuser*
+.DS_Store
+win32/.vs/
+win32/Debug/
+win32/Release/
+*.user
+test/build/
+test/build32/
+test/plugin/
+android/sysroot/
+android/sysroot.work/
