@@ -50,6 +50,7 @@ proxyMt.__index = function( t, k )
 		return nil
 	end
 	if type( k ) == "number" then return n.children[k] end
+	if k == "parent" then return n.parent end
 	if n.props[k] ~= nil then return n.props[k] end
 	if methods[k] then return methods[k] end
 	return nil
@@ -111,6 +112,17 @@ function methods.removeSelf( self )
 	end
 	orphanage[#orphanage + 1] = self
 end
+-- groups: content -> local through x / y / xScale / yScale of the parent chain (no rotation)
+function methods.contentToLocal( self, x, y )
+	local chain, o = {}, self
+	while o do chain[#chain + 1] = o; o = native[o] and native[o].parent end
+	for i = #chain, 1, -1 do
+		local p = native[chain[i]].props
+		x = ( x - ( p.x or 0 ) ) / ( p.xScale or 1 )
+		y = ( y - ( p.y or 0 ) ) / ( p.yScale or 1 )
+	end
+	return x, y
+end
 function methods.setFillColor() end
 function methods.setStrokeColor() end
 function methods.toFront( self )
@@ -128,6 +140,12 @@ function collectOrphans()
 end
 
 function methods.insert( self, child )
+	local old = native[child].parent
+	if old and native[old] then
+		local siblings = native[old].children
+		for i = #siblings, 1, -1 do if siblings[i] == child then table.remove( siblings, i ) end end
+		native[old].props.numChildren = #siblings
+	end
 	table.insert( native[self].children, child )
 	native[self].props.numChildren = #native[self].children
 	native[child].parent = self

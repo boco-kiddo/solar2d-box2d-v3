@@ -181,13 +181,33 @@ int RenderList( lua_State* L )
 
 	if ( debug )
 	{
-		// opaque background hiding the normal display
-		lua_getfield( L, display, "newRect" );
-		lua_pushvalue( L, group );
+		// opaque background hiding the normal display. The draw group lives in the physics world's group,
+		// so centre the rect on the screen centre expressed in that group's coordinates.
 		lua_getfield( L, display, "contentCenterX" );
 		lua_getfield( L, display, "contentCenterY" );
-		lua_pushnumber( L, 100000 );
-		lua_pushnumber( L, 100000 );
+		int cx = lua_gettop( L ) - 1;
+		lua_getfield( L, group, "contentToLocal" );
+		if ( lua_isfunction( L, -1 ) )
+		{
+			lua_pushvalue( L, group );
+			lua_pushvalue( L, cx );
+			lua_pushvalue( L, cx + 1 );
+			lua_call( L, 3, 2 );
+			lua_replace( L, cx + 1 );
+			lua_replace( L, cx );
+		}
+		else
+		{
+			lua_pop( L, 1 );
+		}
+		lua_getfield( L, display, "newRect" );
+		lua_pushvalue( L, group );
+		lua_pushvalue( L, cx );
+		lua_pushvalue( L, cx + 1 );
+		lua_pushnumber( L, 1.0e6 );
+		lua_pushnumber( L, 1.0e6 );
+		lua_remove( L, cx + 1 );
+		lua_remove( L, cx );
 		lua_call( L, 5, 1 );
 		int bg = lua_gettop( L );
 		SetColor( L, bg, "setFillColor", (b2HexColor)0x101018, 1.0f );
@@ -291,7 +311,7 @@ int RenderList( lua_State* L )
 		lua_pop( L, 1 );
 	}
 
-	// keep the debug group on top of everything
+	// keep the debug group on top of its parent (the physics world's group)
 	lua_getfield( L, group, "toFront" );
 	if ( lua_isfunction( L, -1 ) )
 	{
@@ -357,6 +377,85 @@ bool PushGroup( lua_State* L, PluginState* st )
 	st->drawGroupRef = luaL_ref( L, LUA_REGISTRYINDEX );
 	return true;
 }
+
+static bool IsLiveObject( lua_State* L, int index )
+{
+	if ( !lua_istable( L, index ) || !lua_getmetatable( L, index ) )
+	{
+		return false;
+	}
+	lua_pop( L, 1 );
+	return true;
+}
+
+// Pushes the group the shapes must be drawn in: physics.setDrawGroup(), else the parent of a body's
+// display object (physics coordinates are the coordinates of that parent), else nil (stage).
+static void PushDrawParent( lua_State* L, PluginState* st )
+{
+	if ( st->drawParentRef != LUA_NOREF )
+	{
+		lua_rawgeti( L, LUA_REGISTRYINDEX, st->drawParentRef );
+		if ( IsLiveObject( L, -1 ) )
+		{
+			return;
+		}
+		lua_pop( L, 1 );
+	}
+	for ( Body* b : st->bodies )
+	{
+		if ( b->destroyed || b->pendingDestroy )
+		{
+			continue;
+		}
+		lua_rawgeti( L, LUA_REGISTRYINDEX, b->objRef );
+		if ( IsLiveObject( L, -1 ) )
+		{
+			lua_getfield( L, -1, "parent" );
+			lua_remove( L, -2 );
+			if ( IsLiveObject( L, -1 ) )
+			{
+				return;
+			}
+		}
+		lua_pop( L, 1 );
+		break; // a removed object: try again next frame
+	}
+	lua_pushnil( L );
+}
+
+// Moves the draw group (at index) into the right parent so it follows the world group's transform
+// (position, scale, rotation of a camera group). Cheap: a few field reads per frame.
+static void AttachGroup( lua_State* L, PluginState* st, int group )
+{
+	PushDrawParent( L, st );
+	int parent = lua_gettop( L );
+	if ( lua_isnil( L, parent ) )
+	{
+		lua_pop( L, 1 );
+		return;
+	}
+	lua_getfield( L, group, "parent" );
+	bool same = lua_rawequal( L, -1, parent ) != 0;
+	lua_pop( L, 1 );
+	if ( !same )
+	{
+		lua_getfield( L, parent, "insert" );
+		if ( lua_isfunction( L, -1 ) )
+		{
+			lua_pushvalue( L, parent );
+			lua_pushvalue( L, group );
+			if ( lua_pcall( L, 2, 0, 0 ) != 0 )
+			{
+				lua_pop( L, 1 );
+			}
+		}
+		else
+		{
+			lua_pop( L, 1 );
+		}
+	}
+	lua_pop( L, 1 );
+}
 } // namespace
 
 void b2p_renderDebugDraw( lua_State* L, PluginState* st )
@@ -396,6 +495,7 @@ void b2p_renderDebugDraw( lua_State* L, PluginState* st )
 		return;
 	}
 	int group = lua_gettop( L );
+	AttachGroup( L, st, group );
 	lua_pushcfunction( L, RenderList );
 	lua_pushvalue( L, group );
 	lua_getglobal( L, "display" );
@@ -449,6 +549,29 @@ static int setDrawMode( lua_State* L )
 	return 0;
 }
 
+// physics.setDrawGroup( [group] )   (new) group whose coordinates the physics world uses; the debug draw
+// is drawn inside it so it follows its position / scale / rotation. nil: the parent of the bodies' objects.
+static int setDrawGroup( lua_State* L )
+{
+	PluginState* st = b2p_state( L );
+	if ( st->drawParentRef != LUA_NOREF )
+	{
+		luaL_unref( L, LUA_REGISTRYINDEX, st->drawParentRef );
+		st->drawParentRef = LUA_NOREF;
+	}
+	if ( lua_istable( L, 1 ) )
+	{
+		lua_pushvalue( L, 1 );
+		st->drawParentRef = luaL_ref( L, LUA_REGISTRYINDEX );
+	}
+	else if ( !lua_isnoneornil( L, 1 ) )
+	{
+		return luaL_argerror( L, 1, "display group or nil expected" );
+	}
+	b2p_renderDebugDraw( L, st );
+	return 0;
+}
+
 // physics.getDrawMode() -> string   (new)
 static int getDrawMode( lua_State* L )
 {
@@ -463,4 +586,6 @@ void b2p_registerDraw( lua_State* L, int libIndex )
 	lua_setfield( L, libIndex, "setDrawMode" );
 	lua_pushcfunction( L, getDrawMode );
 	lua_setfield( L, libIndex, "getDrawMode" );
+	lua_pushcfunction( L, setDrawGroup );
+	lua_setfield( L, libIndex, "setDrawGroup" );
 }

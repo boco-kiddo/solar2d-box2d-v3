@@ -11,7 +11,7 @@
 #include <vector>
 
 #define B2PLUGIN_NAME "plugin.box2dv3"
-#define B2PLUGIN_VERSION "0.7.0"
+#define B2PLUGIN_VERSION "0.7.1"
 
 struct PluginState;
 struct Mover;
@@ -122,6 +122,7 @@ struct PluginState
 	std::unordered_set<uint64_t> jointKeys; // joints created by the plugin (snapshot restore)
 	int drawMode;	   // 0 normal, 1 hybrid, 2 debug
 	int drawGroupRef;  // registry ref of the debug draw group
+	int drawParentRef; // physics.setDrawGroup(): group the debug draw is inserted in (LUA_NOREF = auto)
 	bool drawContacts; // debug draw also shows contacts
 };
 

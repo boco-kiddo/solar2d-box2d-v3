@@ -97,6 +97,8 @@ thì plugin làm đúng (đơn vị nhất quán: pixel, độ, pixel/giây, đ�
   - `reflectRay` như v2 (trả về hướng phản xạ đã chuẩn hoá).
   - Debug draw vẽ bằng display object trong một group luôn nằm trên cùng, dựng lại mỗi frame (chỉ để debug).
     `"debug"` có nền đục che cảnh thật; `"hybrid"` vẽ trong suốt chồng lên. Vẫn vẽ khi `physics.pause()`.
+    Lớp vẽ nằm **trong group chứa các body** (parent của display object) nên đi theo group đó khi di chuyển /
+    scale / xoay (camera); `physics.setDrawGroup( group )` để chọn group khác, `nil` = tự động.
     `physics.setDrawMode(mode, true)` vẽ thêm điểm tiếp xúc. Hàm mới `physics.getDrawMode()`.
 - Tính năng v3 (bước 6):
   - Element mới: `capsule = { x1, y1, x2, y2, radius }` (pixel, tương đối với object như `circle`); `capsule = true`

@@ -852,9 +852,6 @@ static int SentinelGC( lua_State* L )
 
 // CORONA_PUBLIC_SUFFIX: default visibility on Android, where the plugin is built with -fvisibility=hidden
 CORONA_EXPORT int luaopen_plugin_box2dv3( lua_State* L ) CORONA_PUBLIC_SUFFIX;
-#if defined( __GNUC__ ) && !defined( _WIN32 )
-__attribute__( ( visibility( "default" ) ) )
-#endif
 CORONA_EXPORT int luaopen_plugin_box2dv3( lua_State* L )
 {
 	if ( gState != nullptr )
@@ -905,6 +902,7 @@ CORONA_EXPORT int luaopen_plugin_box2dv3( lua_State* L )
 	st->nextSerial = 0;
 	st->drawMode = 0;
 	st->drawGroupRef = LUA_NOREF;
+	st->drawParentRef = LUA_NOREF;
 	st->drawContacts = false;
 	gState = st;
 

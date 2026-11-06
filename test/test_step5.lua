@@ -105,6 +105,33 @@ check( not pcall( physics.setDrawMode, "wireframe" ), "invalid draw mode errors"
 physics.setDrawMode( "normal" )
 check( physics.getDrawMode() == "normal", "back to normal" )
 
+-- debug draw follows the group of the bodies (camera zoom / scroll)
+do
+	physics.stop(); physics.start()
+	local world = display.newGroup()
+	world.x, world.y, world.xScale, world.yScale = 100, 50, 2, 2
+	local box = display.newRect( world, 60, 40, 20, 20 )
+	physics.addBody( box, "static" )
+	physics.setDrawMode( "debug" )
+	advanceFrames( 1 )
+	local dg = world[world.numChildren]
+	check( dg ~= box and dg.numChildren and dg.numChildren >= 2, "draw group inserted in the bodies' group, on top" )
+	if dg and dg.numChildren then
+		local bg = dg[1]
+		check( math.abs( bg.x - ( display.contentCenterX - 100 ) / 2 ) < 1e-6, "debug background centred on the screen in local coordinates" )
+		check( dg[2].x == 60 and dg[2].y == 40, "shape drawn at the body position in the group's coordinates" )
+	end
+	local other = display.newGroup()
+	physics.setDrawGroup( other )
+	check( other.numChildren == 1 and world[world.numChildren] == box, "setDrawGroup moves the draw" )
+	physics.setDrawGroup( nil )
+	advanceFrames( 1 )
+	check( world[world.numChildren] ~= box and other.numChildren == 0, "setDrawGroup( nil ) back to automatic" )
+	check( not pcall( physics.setDrawGroup, 3 ), "setDrawGroup rejects a non-group" )
+	physics.setDrawMode( "normal" )
+	check( world[world.numChildren] == box, "normal mode removes the draw" )
+end
+
 physics.stop()
 check( not pcall( physics.rayCast, 0, 0, 1, 1 ), "rayCast needs a world" )
 print( string.format( "\n%d passed, %d failed", passed, failed ) )

@@ -526,8 +526,17 @@ Neither function can be called inside `preCollision`.
 ### physics.setDrawMode( mode, [drawContacts] ) / physics.getDrawMode()
 
 `mode`: `"normal"`, `"hybrid"` (shapes drawn over the scene) or `"debug"` (shapes only, on an opaque
-background). `drawContacts = true` also draws contact points. The overlay is made of display objects, rebuilt
-every frame, always on top — for debugging only.
+background). `drawContacts = true` also draws contact points. The overlay is made of display objects rebuilt
+every frame — for debugging only.
+
+The overlay is drawn **inside the group that holds the bodies** (the parent of their display objects), on top
+of it, so it follows that group when it is moved, scaled or rotated (a camera / zoom group). UI outside that
+group stays above the overlay.
+
+### physics.setDrawGroup( [group] ) — new
+
+Draws the overlay inside `group` instead. Use it when the bodies are spread over several child groups that
+share the same coordinates. `nil` goes back to automatic.
 
 ---
 

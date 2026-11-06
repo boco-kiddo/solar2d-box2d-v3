@@ -22,7 +22,7 @@ local function ground( y, w )
 end
 
 physics.start()
-check( physics.version == "0.7.0", "version 0.7.0" )
+check( physics.version >= "0.7.0", "version >= 0.7.0" )
 
 -- ---------------------------------------------------------------- motor joint
 do
