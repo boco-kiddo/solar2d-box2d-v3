@@ -576,7 +576,13 @@ void b2p_parseElement( lua_State* L, const PluginState* st, int obj, int t, b2Bo
 			b2Hull hull = b2ComputeHull( points, n );
 			if ( hull.count == 0 )
 			{
-				luaL_error( L, "physics.addBody() of a \"shape\" with no area, or nearly no area, has been rejected." );
+				// No area (or nearly none, e.g. a sliver triangle of a triangulated ground): leave this
+				// element out instead of failing the whole addBody. It keeps its index so selfElement /
+				// otherElement still match the order of the elements passed to addBody.
+				b2p_warn( L, "addBody: element %d is a \"shape\" with no area (or nearly none); it was skipped.", e.index );
+				e.kind = kElementSkipped;
+				out.push_back( e );
+				return;
 			}
 			if ( hull.count < n )
 			{
@@ -819,6 +825,10 @@ void b2p_createElementShapes( b2BodyId bodyId, ElementRecord& rec )
 	rec.chainA = b2_nullChainId;
 	rec.chainB = b2_nullChainId;
 
+	if ( rec.kind == kElementSkipped )
+	{
+		return;
+	}
 	if ( rec.kind == kElementCircle )
 	{
 		b2ShapeDef sd = MakeShapeDef( rec );
@@ -942,6 +952,7 @@ static int LineAppend( lua_State* L )
 	lua_pushvalue( L, 1 );
 	lua_pushliteral( L, "append" );
 	lua_call( L, 2, 1 ); // original append (rawget field is ours, __index gives Solar2D's)
+	luaL_checkstack( L, n + 8, "too many arguments" ); // line:append( unpack( points ) )
 	for ( int i = 1; i <= n; ++i )
 	{
 		lua_pushvalue( L, i );
@@ -972,6 +983,9 @@ static int LineAppend( lua_State* L )
 static int NewLineHook( lua_State* L )
 {
 	int n = lua_gettop( L );
+	// the arguments are pushed again for the original function: display.newLine( parent, unpack( points ) )
+	// easily passes more than the LUA_MINSTACK (20) free slots a C function is guaranteed
+	luaL_checkstack( L, n + 8, "too many arguments" );
 	lua_pushvalue( L, lua_upvalueindex( 1 ) );
 	for ( int i = 1; i <= n; ++i )
 	{
@@ -1022,6 +1036,9 @@ static int NewLineHook( lua_State* L )
 static int NewPolygonHook( lua_State* L )
 {
 	int n = lua_gettop( L );
+	// the arguments are pushed again for the original function: display.newLine( parent, unpack( points ) )
+	// easily passes more than the LUA_MINSTACK (20) free slots a C function is guaranteed
+	luaL_checkstack( L, n + 8, "too many arguments" );
 	lua_pushvalue( L, lua_upvalueindex( 1 ) );
 	for ( int i = 1; i <= n; ++i )
 	{
@@ -1076,6 +1093,9 @@ static int NewPolygonHook( lua_State* L )
 static int NewOutlineHook( lua_State* L )
 {
 	int n = lua_gettop( L );
+	// the arguments are pushed again for the original function: display.newLine( parent, unpack( points ) )
+	// easily passes more than the LUA_MINSTACK (20) free slots a C function is guaranteed
+	luaL_checkstack( L, n + 8, "too many arguments" );
 	lua_pushvalue( L, lua_upvalueindex( 1 ) );
 	for ( int i = 1; i <= n; ++i )
 	{

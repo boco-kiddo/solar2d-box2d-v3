@@ -629,6 +629,7 @@ static int CallOrigMethodThenTeleport( lua_State* L, const char* name )
 	}
 	CheckUnlocked( L, body->state, name );
 	int nargs = lua_gettop( L );
+	luaL_checkstack( L, nargs + 8, "too many arguments" );
 	OrigGet( L, body, 1, name );
 	for ( int i = 1; i <= nargs; ++i )
 	{
