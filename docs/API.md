@@ -1,6 +1,6 @@
 # plugin.box2dv3 — API reference
 
-Plugin version **0.7.0**, Box2D **3.2.0**.
+Plugin version **0.7.1**, Box2D **3.2.0**.
 
 ```lua
 local physics = require( "plugin.box2dv3" )
@@ -158,7 +158,7 @@ Accepted for compatibility (no effect).
 
 ### physics.version, physics.engineVersion
 
-Plugin version (`"0.7.0"`) and Box2D version (`"3.2.0"`).
+Plugin version (`"0.7.1"`) and Box2D version (`"3.2.0"`).
 
 ---
 
