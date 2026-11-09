@@ -179,7 +179,7 @@ Fields are tried in this order; the first one present defines the element.
 |---|---|
 | `circle = { radius, x, y }` | circle at an offset from the object centre — new |
 | `capsule = { x1, y1, x2, y2, radius }` | capsule; `capsule = true` (or missing fields) fits the object along its longer side — v3 |
-| `shape = { x1, y1, x2, y2, ... }` | convex polygon, at most 8 vertices, relative to the object centre. A concave polygon is replaced by its convex hull (with a warning). |
+| `shape = { x1, y1, x2, y2, ... }` | convex polygon, at most 8 vertices, relative to the object centre. A concave polygon is replaced by its convex hull (with a warning). A shape with no area (e.g. collinear points) is skipped with a warning; the other elements keep their index. |
 | `box = { halfWidth, halfHeight, x, y, angle }` | rectangle with an offset and angle |
 | `chain = { x1, y1, ... }` | chain of segments, collides on both sides; `connectFirstAndLastChainVertex = true` closes it |
 | `radius = r` | circle centred on the object |

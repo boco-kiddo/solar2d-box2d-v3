@@ -22,6 +22,7 @@ enum ElementKind
 	kElementPolygon,
 	kElementChain, // "chain", display.newLine, static display.newPolygon
 	kElementCapsule,
+	kElementSkipped, // degenerate "shape" left out (keeps the element numbering of addBody)
 };
 
 // One body element (v2 "fixture"). Kept so shapes can be rebuilt (e.g. obj.isSensor = true).

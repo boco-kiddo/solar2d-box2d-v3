@@ -207,6 +207,24 @@ check( physics.setMKS( "linearSleepTolerance", 0.1 ) == true and near( physics.g
 check( physics.setMKS( "contactHertz", 45 ) == true and physics.getMKS( "contactHertz" ) == 45, "setMKS contactHertz (v3)" )
 check( physics.setMKS( "timeToSleep", 1 ) == false, "setMKS unsupported v2 key returns false" )
 
+-- a "shape" with no area is skipped (warning), the other elements keep their index
+do
+	local g = display.newRect( 100, 300, 10, 10 )
+	local okAdd = pcall( physics.addBody, g, "static",
+		{ shape = { 0, 0, 10, 0, 20, 0 } },                 -- collinear: no area
+		{ shape = { -10, -10, 10, -10, 0, 10 } } )
+	check( okAdd and g.bodyType == "static", "zero-area shape skipped, body created" )
+	local hits = physics.rayCast( 100, 250, 100, 350, "closest" )
+	check( hits and hits[1].element == 2, "remaining element keeps index 2" )
+	display.remove( g )
+	-- a long display.newLine( parent, unpack( points ) ) must not overflow the Lua stack in the hook
+	local pts = {}
+	for i = 1, 60 do pts[#pts + 1] = i * 5; pts[#pts + 1] = 200 + ( i % 2 ) * 3 end
+	local line = display.newLine( unpack( pts ) )
+	check( #rawget( line, "_b2line" ) == 120, "newLine with 120 arguments" )
+	display.remove( line )
+end
+
 physics.stop()
 print( string.format( "\n%d passed, %d failed", passed, failed ) )
 os.exit( failed == 0 and 0 or 1 )

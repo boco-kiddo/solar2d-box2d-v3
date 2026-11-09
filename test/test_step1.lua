@@ -100,7 +100,11 @@ check( pcall( physics.addBody, multi, "dynamic",
 	{ box = { halfWidth = 5, halfHeight = 20, x = 20, y = 0, angle = 45 } },
 	{ circle = { radius = 5, x = -20, y = 0 } } ), "multi element body" )
 check( physics.getStats().shapeCount >= 3, "shapes created" )
-check( not pcall( physics.addBody, display.newRect( 0, 0, 1, 1 ), { shape = { 0, 0, 1, 1, 2, 2 } } ), "degenerate shape rejected" )
+do -- a "shape" with no area is skipped with a warning instead of failing addBody
+	local before = physics.getStats().shapeCount
+	check( pcall( physics.addBody, display.newRect( 0, 0, 1, 1 ), { shape = { 0, 0, 1, 1, 2, 2 } } )
+		and physics.getStats().shapeCount == before, "degenerate shape skipped" )
+end
 check( not pcall( physics.addBody, display.newRect( 0, 0, 1, 1 ), { shape = { 0, 0, 1, 0 } } ), "too few vertices rejected" )
 check( not pcall( physics.addBody, {}, "dynamic" ), "non display object rejected" )
 
