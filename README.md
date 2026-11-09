@@ -213,15 +213,18 @@ run `install_plugin.bat` again.
 | `android/` | `build_zig.sh`, `make_sysroot.sh`, NDK build (`build.bat`, `jni/`), `metadata.lua` |
 | `plugins/<publisherId>/plugin.box2dv3/<platform>/data.tgz` | packaged plugin |
 | `install_plugin.bat` | installs the packages into the local Solar2D plugin folder |
-| `Corona/` | test app: sandbox, benchmarks (v2 vs v3), one scene and self-test per feature group |
+| `Corona/` | test app (`main.lua`); `Corona/tests/` has one scene + self-test per feature group and the benchmark |
 | `test/` | tests that run on Linux with a mock of Solar2D's display objects |
 | `docs/API.md` | API reference |
 | `docs/ROADMAP.md`, `docs/HUONG_DAN.md` | development notes (Vietnamese) |
 
 ## Testing
 
-**In Solar2D:** open `Corona/` in the Simulator. The buttons open the scenes of each feature group and run
-their self-tests (results in the console). `bench v2` / `bench v3` compare the built-in library with the plugin.
+**In Solar2D:** open `Corona/` in the Simulator. `☰ tests` opens the menu: one test scene per feature group
+(bodies & shapes, collisions, joints, queries & debug draw, v3 shapes & forces, mover & snapshots, benchmark),
+**run all tests**, gravity and thread count. The top bar runs the current scene's self-test, pauses and cycles
+the debug draw mode. Self-test results go to the console; "run all tests" also shows a summary. The benchmark
+scene runs the same stress scenes on the plugin and on the built-in library.
 
 **Without Solar2D** (Linux / macOS):
 
