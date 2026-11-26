@@ -189,6 +189,27 @@ advanceFrames( 1 )
 check( t2.maxForce == nil, "joint invalid after body removed" )
 check( physics.getStats().worldBodyCount == worldBodies - 2, "helper cleaned up with the body" )
 
+-- ---------------------------------------------------------------- filter (no collision between the pair)
+fresh()
+local floorF = box( 160, 300, 300, 20, "static" )
+local lowerF = box( 160, 280, 40, 20 )             -- resting on the floor
+local upperF = box( 160, 200, 40, 20 )             -- falls onto lowerF
+local fj = physics.newJoint( "filter", lowerF, upperF )
+check( fj.jointType == "filter" and tostring( fj ):find( "filter" ) ~= nil, "filter joint type" )
+check( fj.isCollideConnected == false, "filter joint: connected objects do not collide" )
+advanceFrames( 90 )
+check( math.abs( upperF.y - 280 ) < 3, "filter joint: upper box falls through the lower one (" .. upperF.y .. ")" )
+check( math.abs( lowerF.y - 280 ) < 3, "filter joint: floor still holds both (" .. lowerF.y .. ")" )
+local otherF = box( 160, 200, 40, 20 )              -- not in the pair: still collides
+advanceFrames( 90 )
+check( otherF.y < 262, "filter joint: other objects still collide (" .. otherF.y .. ")" )
+fj:removeSelf()
+upperF.x = 160; upperF.y = 200; upperF:setLinearVelocity( 0, 0 )
+display.remove( otherF )
+advanceFrames( 90 )
+check( upperF.y < 262, "removing the filter joint restores the collision (" .. upperF.y .. ")" )
+check( not pcall( physics.newJoint, "filter", lowerF, lowerF ), "filter joint: same object errors" )
+
 -- ---------------------------------------------------------------- lifetime and errors
 fresh()
 local a = box( 0, 0, 10, 10, "static" )

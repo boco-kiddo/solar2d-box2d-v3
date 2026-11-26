@@ -725,6 +725,9 @@ static int setThreadCount( lua_State* L )
 	}
 	int n = (int)luaL_checkinteger( L, 1 );
 	n = n < 1 ? 1 : ( n > B2_MAX_WORKERS ? B2_MAX_WORKERS : n );
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
+	n = 1; // HTML5 build without pthreads: Box2D runs on the main thread only
+#endif
 	if ( n != st->threadCount )
 	{
 		st->threadCount = n;

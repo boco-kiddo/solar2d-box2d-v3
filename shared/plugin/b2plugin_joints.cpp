@@ -10,6 +10,7 @@
 //   "rope"     distance joint with only a maximum length
 //   "touch"    motor joint to a hidden kinematic body that follows joint:setTarget()
 //   "motor"    (new) motor joint: drives object2 to an offset / velocity relative to object1
+//   "filter"   (new) filter joint: no constraint, the two objects just stop colliding with each other
 //   "pulley", "gear": not available in Box2D v3 (error)
 //
 // Every joint (new): joint.breakForce (N) / joint.breakTorque (N*m). When the joint's constraint force
@@ -40,10 +41,12 @@ enum JointKind
 	kJointRope,
 	kJointTouch,
 	kJointMotor,
+	kJointFilter,
 };
 
 static const char* const kJointNames[] = { "pivot", "distance", "piston", "wheel", "weld", "friction", "rope", "touch",
-										   "motor" };
+										   "motor", "filter" };
+static_assert( sizeof( kJointNames ) / sizeof( kJointNames[0] ) == kJointFilter + 1, "one name per JointKind" );
 
 static uint64_t JointKey( b2JointId id )
 {
@@ -1022,6 +1025,18 @@ int b2p_newJoint( lua_State* L )
 			j = PushJoint( L, st, b2CreatePrismaticJoint( st->world, &d ), kJointPiston );
 		}
 		j->referenceAngle = refAngle;
+		return 1;
+	}
+	if ( strcmp( type, "filter" ) == 0 )
+	{
+		// physics.newJoint( "filter", objA, objB ): the two objects stop colliding with each other (and nothing
+		// else changes) until the joint is removed. Cheaper than collision filters for one pair, e.g. a car body
+		// and its wheels, or a rope's ends and what they hang from.
+		b2FilterJointDef d = b2DefaultFilterJointDef();
+		d.base.bodyIdA = a;
+		d.base.bodyIdB = b;
+		d.base.collideConnected = false;
+		PushJoint( L, st, b2CreateFilterJoint( st->world, &d ), kJointFilter );
 		return 1;
 	}
 	if ( strcmp( type, "distance" ) == 0 )

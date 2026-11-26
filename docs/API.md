@@ -328,6 +328,7 @@ local joint = physics.newJoint( type, objectA, objectB, ... )
 | `"rope"` | `offsetAx, offsetAy, offsetBx, offsetBy, [maxLength]` | distance joint with a maximum length; offsets from each body's origin; default length = current distance between the anchors |
 | `"touch"` | *(one object)* `physics.newJoint( "touch", obj, x, y )` | motor joint to a hidden kinematic body |
 | `"motor"` | *(none)* | **v3** motor joint |
+| `"filter"` | *(none)* | **v3** filter joint: the two objects stop colliding with each other |
 | `"pulley"`, `"gear"` | — | not in Box2D v3: error |
 
 Anchors and axes are in content coordinates.
@@ -362,6 +363,19 @@ raise an error.
 | `rope` | `maxLength` (**changed:** px both ways), `limitState` (`"upper"` / `"inactive"`) |
 | `touch` | `maxForce`, `frequency`, `dampingRatio`, `setTarget( x, y )`, `getTarget()` |
 | `motor` | see below |
+| `filter` | none (only the common members) |
+
+### "filter" joint — v3
+
+```lua
+local f = physics.newJoint( "filter", car, wheel )   -- car and wheel never collide
+f:removeSelf()                                       -- they collide again
+```
+
+No constraint: it only disables collision between its two objects, whatever their filters. Use it for one pair
+(a vehicle and its wheels, a hook and its rope, a character and an item it carries); collision filters
+(`categoryBits`, `maskBits`, `groupIndex`) are better for whole groups. Removing either object removes the joint.
+Setting `isCollideConnected = true` makes the pair collide again while keeping the joint.
 
 ### "motor" joint — v3
 
@@ -547,7 +561,7 @@ share the same coordinates. `nil` goes back to automatic.
 Number of threads Box2D uses, including the main thread (default 1). Helps large scenes (hundreds of
 awake bodies). Steps that have a `preCollision` listener run on one thread automatically, because Lua runs
 inside the step; removing the listener restores the thread count. `physics.getThreadCount()` returns the
-configured count and the count used by the last step.
+configured count and the count used by the last step. In HTML5 builds (no pthreads) it always stays 1.
 
 ---
 
